@@ -1,0 +1,37 @@
+{
+  "name": "serveless-test",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "serverless offline --stage prod",
+    "dev": "serverless offline --stage dev",
+    "deploy:prod": "serverless deploy --stage prod",
+    "deploy:dev": "serverless deploy --stage dev"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@typescript-eslint/eslint-plugin": "^5.37.0",
+    "aws-lambda": "^1.0.7",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-simple-import-sort": "^8.0.0",
+    "eslint-plugin-unused-imports": "^2.0.0",
+    "husky": "^8.0.1",
+    "mongoose": "^6.6.1",
+    "prettier": "^2.7.1",
+    "serverless-bundle": "^5.5.0",
+    "serverless-dotenv-plugin": "^4.0.2",
+    "serverless-offline": "^10.0.2"
+  },
+  "devDependencies": {
+    "axios": "^0.27.2",
+    "bcrypt": "^5.0.1",
+    "bcryptjs": "^2.4.3",
+    "jsonwebtoken": "^8.5.1",
+    "serverless-domain-manager": "^6.1.0",
+    "uuidv4": "^6.2.13"
+  }
+}

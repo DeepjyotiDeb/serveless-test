@@ -1,0 +1,46 @@
+org: deepjyotideb
+console: true
+service: user
+useDotenv: true
+
+# frameworkVersion: ">=1.2.0 <2.0.0"
+# frameworkVersion: '^3'
+package:
+  individually: true
+  excludeDevDependencies: true
+
+plugins:
+  - serverless-dotenv-plugin
+  - serverless-bundle
+  - serverless-offline
+
+custom:
+  serverless-offline:
+    httpPort: 4000
+
+provider:
+  name: aws
+  runtime: nodejs14.x
+  stage: ${opt:stage, 'dev'}
+  region: ${env:REGION}
+  timeout: 30
+
+functions:
+  updateUser:
+    handler: services/user.login
+    events:
+      - http:
+          path: /login
+          method: POST
+          cors: true
+
+  getUser:
+    handler: services/user.signup
+    events:
+      - http:
+          path: /signup
+          method: POST
+          cors: true
+
+resources:
+  - ${file(resources/api-gateway-errors.yml)}
