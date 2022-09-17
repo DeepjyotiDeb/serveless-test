@@ -13,15 +13,18 @@ const UserSchema = new Schema({
   ],
 });
 
-const BlogSchema = new Schema({
-  userId: {
-    type: Schema.Types.ObjectId,
-    ref: 'users',
+const BlogSchema = new Schema(
+  {
+    userId: {
+      type: Schema.Types.ObjectId,
+      ref: 'users',
+    },
+    title: String,
+    summary: String,
+    description: String,
   },
-  title: String,
-  summary: String,
-  description: String,
-});
+  { collection: 'blog' }
+);
 
 export const UserTable = model('users', UserSchema);
 export const BlogTable = model('blog', BlogSchema);
