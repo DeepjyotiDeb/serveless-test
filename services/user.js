@@ -110,10 +110,7 @@ export const signup = async (event, context) => {
       email: data.email,
       username: data.username,
       password: hashPassword,
-      // verificationEmailGeneratedAt: new Date(),
-      // emailVerified: false,
-      resetToken: '',
-      type: data.userType,
+      type: data.type,
     });
 
     if (!newUser) {
@@ -124,6 +121,30 @@ export const signup = async (event, context) => {
       status: true,
       message: STRINGS.ACC_CREATED,
       type: 'SIGNUP',
+    });
+  } catch (error) {
+    return failure({
+      status: false,
+      error: error,
+    });
+  }
+};
+
+export const getUsers = async (event, context) => {
+  try {
+    context.callbackWaitsForEmptyEventLoop = false;
+    // const data = JSON.parse(event.body);
+
+    try {
+      await connectToDatabase();
+    } catch (error) {
+      throw { statusCode: 503, message: ERRORS.DB_UNREACHABLE };
+    }
+    const users = await UserTable.find().select('name email username');
+
+    return success({
+      status: true,
+      users: users,
     });
   } catch (error) {
     return failure({
