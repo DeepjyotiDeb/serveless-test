@@ -15,6 +15,7 @@ plugins:
   - serverless-offline
 
 custom:
+  # secrets: ${file(.env.${sls:stage, self:provider.stage, 'dev'})}
   serverless-offline:
     httpPort: 4000
 
@@ -22,11 +23,15 @@ provider:
   name: aws
   runtime: nodejs14.x
   stage: ${opt:stage, 'dev'}
+  profile: ${env:PROFILE}
   region: ${env:REGION}
   timeout: 30
 
 functions:
-  updateUser:
+  verify-token:
+    handler: services/verifyToken.auth
+
+  loginUser:
     handler: services/user.login
     events:
       - http:
@@ -34,13 +39,53 @@ functions:
           method: POST
           cors: true
 
-  getUser:
+  createUser:
     handler: services/user.signup
     events:
       - http:
           path: /signup
           method: POST
           cors: true
+
+  getUser:
+    handler: services/user.getUsers
+    events:
+      - http:
+          path: /getuser
+          method: get
+          cors: true
+          authorizer:
+            name: verify-token
+
+  getBlogs:
+    handler: services/blog.getBlogs
+    events:
+      - http:
+          path: /getblogs
+          method: get
+          cors: true
+          authorizer:
+            name: verify-token
+
+  createBlog:
+    handler: services/blog.createBlog
+    events:
+      - http:
+          path: /createBlog
+          method: post
+          cors: true
+          authorizer:
+            name: verify-token
+
+  findByuser:
+    handler: services/blog.findByUser
+    events:
+      - http:
+          path: /blogsByUser
+          method: post
+          cors: true
+          authorizer:
+            name: verify-token
 
 resources:
   - ${file(resources/api-gateway-errors.yml)}
