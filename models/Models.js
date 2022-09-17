@@ -1,20 +1,30 @@
-import mongoose from 'mongoose';
+import { model, Schema } from 'mongoose';
 
-const UserSchema = new mongoose.Schema({
+const UserSchema = new Schema({
   name: String,
   username: String,
   email: String,
   password: String,
-  type: String,
+  blogs: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: 'blog',
+    },
+  ],
 });
-const BlogSchema = new mongoose.Schema({
+
+const BlogSchema = new Schema({
+  userId: {
+    type: Schema.Types.ObjectId,
+    ref: 'users',
+  },
   title: String,
   summary: String,
   description: String,
 });
 
-export const UserTable = mongoose.model('users', UserSchema);
-export const BlogTable = mongoose.model('blogs', BlogSchema);
+export const UserTable = model('users', UserSchema);
+export const BlogTable = model('blog', BlogSchema);
 
 // const schema = new mongoose.Schema({ name: 'string', size: 'string' });
 // const Tank = mongoose.model('Tank', schema);
