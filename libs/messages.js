@@ -1,6 +1,7 @@
 export const ERRORS = {
   DB_UNREACHABLE: 'Database unreachable.',
-
+  NO_BLOG: 'No blogs found',
+  INVALID_USER: 'No userId found',
   INVALID_DATA:
     'Invalid details provided, Please provide correct email and password.',
   INVALID_EMAIL: 'Invalid email address provided, please try again',
