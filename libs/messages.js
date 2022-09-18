@@ -2,12 +2,12 @@ export const ERRORS = {
   DB_UNREACHABLE: 'Database unreachable.',
   NO_BLOG: 'No blogs found',
   INVALID_USER: 'No userId found',
+  BLOGNOTFOUND: 'Blog not found',
   INVALID_DATA:
     'Invalid details provided, Please provide correct email and password.',
   INVALID_EMAIL: 'Invalid email address provided, please try again',
   INVALID_PASSWORD:
     'Invalid password or no password provided, please try again',
-  INVALID_USER_TYPE: 'Invalid user type provided, please try again',
   NO_NAME: 'Invalid name, please provide valid name.',
 
   NO_PASSWORD:
@@ -24,10 +24,6 @@ export const ERRORS = {
 
   PASSWORD_MISMATCH:
     'Invalid password, please enter correct password and try again',
-
-  ORG_NOT_FOUND:
-    'This account is not the part of any organization, Please try signing up or add the account to existing organization!',
-
   TOKEN_UPDATE_ERROR:
     'Can not generate password reset link at the moment, please try again!',
 
@@ -41,6 +37,7 @@ export const ERRORS = {
 };
 
 export const STRINGS = {
+  BLOG_UPDATED: 'Blog updated',
   OTP_SENT: 'An OTP has been sent to your mobile number.',
 
   ACC_CREATED: 'You are now registed with SmartPaper, Start Evaluating!',

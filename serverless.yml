@@ -38,7 +38,6 @@ functions:
           path: /login
           method: POST
           cors: true
-
   createUser:
     handler: services/user.signup
     events:
@@ -46,7 +45,6 @@ functions:
           path: /signup
           method: POST
           cors: true
-
   getUser:
     handler: services/user.getUsers
     events:
@@ -66,7 +64,6 @@ functions:
           cors: true
           authorizer:
             name: verify-token
-
   createBlog:
     handler: services/blog.createBlog
     events:
@@ -76,12 +73,29 @@ functions:
           cors: true
           authorizer:
             name: verify-token
-
   findByuser:
     handler: services/blog.findByUser
     events:
       - http:
           path: /blogsByUser
+          method: post
+          cors: true
+          authorizer:
+            name: verify-token
+  getBlog:
+    handler: services/blog.getBlog
+    events:
+      - http:
+          path: /blogs/{id}
+          method: get
+          cors: true
+          authorizer:
+            name: verify-token
+  updateBlog:
+    handler: services/blog.updateBlog
+    events:
+      - http:
+          path: /blog/{id}/update
           method: post
           cors: true
           authorizer:

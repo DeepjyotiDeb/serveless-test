@@ -1,5 +1,5 @@
 import { connectToDatabase } from '../libs/db';
-import { ERRORS } from '../libs/messages';
+import { ERRORS, STRINGS } from '../libs/messages';
 import { failure, success } from '../libs/response-lib';
 import { BlogTable, UserTable } from '../models/Models';
 
@@ -101,6 +101,70 @@ export const findByUser = async (event, context) => {
       status: true,
       userBlogs: userBlogs,
     });
+  } catch (error) {
+    return failure({
+      status: false,
+      error: error,
+    });
+  }
+};
+
+export const getBlog = async (event, context) => {
+  try {
+    context.callbackWaitsForEmptyEventLoop = false;
+    const { id } = event.pathParameters;
+    try {
+      await connectToDatabase();
+    } catch (error) {
+      throw { statusCode: 503, message: ERRORS.DB_UNREACHABLE };
+    }
+    let blog;
+    try {
+      blog = await BlogTable.findById(id);
+    } catch (error) {
+      throw { statusCode: 502, message: ERRORS.NO_BLOG };
+    }
+    return success({
+      status: true,
+      blog: blog,
+    });
+  } catch (error) {
+    return failure({ status: false, error: error });
+  }
+};
+
+export const updateBlog = async (event, context) => {
+  context.callbackWaitsForEmptyEventLoop = false;
+  const data = event.body;
+  try {
+    try {
+      await connectToDatabase();
+    } catch (error) {
+      throw { statusCode: 503, message: ERRORS.DB_UNREACHABLE };
+    }
+    let blog = {};
+    for (const key in data) {
+      if (data[key] !== undefined && key !== '_v') blog[key] = data[key];
+    }
+    if (Object.keys(blog).length === 0) {
+      return failure({
+        status: false,
+        error: 'Nothing to update',
+      });
+    }
+
+    console.log(data, blog);
+    const updateResult = await BlogTable.findByIdAndUpdate(data.id, data.body);
+    console.log(updateResult);
+    return success({
+      status: true,
+      message: STRINGS.BLOG_UPDATED,
+      updatedBlog: updateResult,
+    });
+    // if (updateResult.isModified) {
+    // } else {
+    //   throw { statusCode: 400, message: ERRORS.BLOGNOTFOUND };
+    // }
   } catch (error) {
     return failure({
       status: false,
