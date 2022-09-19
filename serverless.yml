@@ -62,8 +62,7 @@ functions:
           path: /getblogs
           method: get
           cors: true
-          authorizer:
-            name: verify-token
+
   createBlog:
     handler: services/blog.createBlog
     events:
@@ -96,7 +95,16 @@ functions:
     events:
       - http:
           path: /blog/{id}/update
-          method: post
+          method: patch
+          cors: true
+          authorizer:
+            name: verify-token
+  deleteBlog:
+    handler: services/blog.deleteBlog
+    events:
+      - http:
+          path: /blog/{id}/delete
+          method: delete
           cors: true
           authorizer:
             name: verify-token

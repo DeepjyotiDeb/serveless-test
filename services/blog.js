@@ -25,6 +25,7 @@ export const createBlog = async (event, context) => {
       title: data.title,
       summary: data.summary,
       description: data.description,
+      createdAt: data.createdAt,
     });
     return success({
       status: true,
@@ -42,7 +43,6 @@ export const createBlog = async (event, context) => {
 export const getBlogs = async (event, context) => {
   try {
     context.callbackWaitsForEmptyEventLoop = false;
-    // const data = JSON.parse(event.body);
 
     try {
       await connectToDatabase();
@@ -50,31 +50,14 @@ export const getBlogs = async (event, context) => {
       throw { statusCode: 503, message: ERRORS.DB_UNREACHABLE };
     }
 
-    // if (typeof data.authorId === 'undefined') {
-    //   throw { statusCode: 400, message: 'Invalid AuthorId, Please try again!' };
-    // }
-
-    const blogs = await BlogTable.find();
+    const blogs = await BlogTable.find({}, 'title summary createdAt').populate(
+      'userId',
+      'name username'
+    );
 
     if (blogs.length === 0) {
       throw { statusCode: 400, message: ERRORS.NO_BLOG };
     }
-    // const updateActivity = await BlogTable.findByIdAndUpdate(
-    //   data.userId,
-    //   {
-    //     $set: {
-    //       lastAccessedAt: new Date(),
-    //     },
-    //   },
-    //   { new: true }
-    // );
-
-    // if (!updateActivity) {
-    //   throw {
-    //     statusCode: 400,
-    //     message: 'Invalid Blog, Please try again!',
-    //   };
-    // }
     return success({
       status: true,
       blog: blogs,
@@ -96,7 +79,10 @@ export const findByUser = async (event, context) => {
     } catch (error) {
       throw { statusCode: 503, message: ERRORS.DB_UNREACHABLE };
     }
-    const userBlogs = await BlogTable.find({ userId: data.userId });
+    const userBlogs = await BlogTable.find({ userId: data.userId }).populate(
+      'userId',
+      'name'
+    );
     return success({
       status: true,
       userBlogs: userBlogs,
@@ -120,12 +106,14 @@ export const getBlog = async (event, context) => {
     }
     let blog;
     try {
-      blog = await BlogTable.findById(id);
+      blog = await BlogTable.findById(
+        id,
+        'title summary description createdAt'
+      ).populate('userId', 'name');
     } catch (error) {
       throw { statusCode: 502, message: ERRORS.NO_BLOG };
     }
     return success({
-      status: true,
       blog: blog,
     });
   } catch (error) {
@@ -135,7 +123,8 @@ export const getBlog = async (event, context) => {
 
 export const updateBlog = async (event, context) => {
   context.callbackWaitsForEmptyEventLoop = false;
-  const data = event.body;
+  const data = JSON.parse(event.body);
+
   try {
     try {
       await connectToDatabase();
@@ -153,18 +142,47 @@ export const updateBlog = async (event, context) => {
       });
     }
 
-    console.log(data, blog);
-    const updateResult = await BlogTable.findByIdAndUpdate(data.id, data.body);
-    console.log(updateResult);
+    const updatedResult = await BlogTable.findByIdAndUpdate(data.id, blog);
+    // const isPasswordValid = await bcrypt.compare(
+    //   data.password,
+    //   user['password']
+    // );
+    // console.log(isPasswordValid);
+    if (!updatedResult) throw { statusCode: 501, message: ERRORS.INVALID_DATA };
     return success({
       status: true,
       message: STRINGS.BLOG_UPDATED,
-      updatedBlog: updateResult,
+      updatedBlog: updatedResult,
     });
     // if (updateResult.isModified) {
     // } else {
     //   throw { statusCode: 400, message: ERRORS.BLOGNOTFOUND };
     // }
+  } catch (error) {
+    return failure({
+      status: false,
+      error: error,
+    });
+  }
+};
+
+export const deleteBlog = async (event, context) => {
+  try {
+    context.callbackWaitsForEmptyEventLoop = false;
+    const blogId = JSON.parse(event.body);
+
+    try {
+      await connectToDatabase();
+    } catch (error) {
+      throw { statusCode: 503, message: ERRORS.DB_UNREACHABLE };
+    }
+    if (!blogId.id) throw { statusCode: 502, message: ERRORS.BLOGNOTFOUND };
+
+    const removedBlog = await BlogTable.findByIdAndDelete(blogId.id);
+    return success({
+      status: true,
+      removedBlog: removedBlog,
+    });
   } catch (error) {
     return failure({
       status: false,

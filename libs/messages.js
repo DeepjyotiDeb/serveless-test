@@ -40,7 +40,7 @@ export const STRINGS = {
   BLOG_UPDATED: 'Blog updated',
   OTP_SENT: 'An OTP has been sent to your mobile number.',
 
-  ACC_CREATED: 'You are now registed with SmartPaper, Start Evaluating!',
+  ACC_CREATED: 'You are now signed up with Braincell! Happy Blogging',
   ACC_DETAILS_UPDATED: 'Your account details are updated.',
 
   RESET_EMAIL_SENT:

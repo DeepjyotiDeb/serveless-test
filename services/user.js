@@ -58,12 +58,9 @@ export const login = async (event, context) => {
       user: {
         _id: user['_id'],
         name: user['name'],
-        email: user['email'],
         username: user['username'],
-        type: user['type'],
         token: token,
       },
-      token: token,
     });
   } catch (error) {
     return failure({

@@ -22,6 +22,7 @@ const BlogSchema = new Schema(
     title: String,
     summary: String,
     description: String,
+    createdAt: Date,
   },
   { collection: 'blog' }
 );
