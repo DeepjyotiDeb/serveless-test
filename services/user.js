@@ -56,7 +56,7 @@ export const login = async (event, context) => {
     return success({
       status: true,
       user: {
-        _id: user['_id'],
+        id: user['_id'],
         name: user['name'],
         username: user['username'],
         token: token,
@@ -137,7 +137,7 @@ export const getUsers = async (event, context) => {
     } catch (error) {
       throw { statusCode: 503, message: ERRORS.DB_UNREACHABLE };
     }
-    const users = await UserTable.find().select('name email username');
+    const users = await UserTable.find();
 
     return success({
       status: true,

@@ -14,6 +14,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@aws-sdk/client-secrets-manager": "^3.171.0",
     "@typescript-eslint/eslint-plugin": "^5.37.0",
     "aws-lambda": "^1.0.7",
     "eslint-config-prettier": "^8.5.0",
