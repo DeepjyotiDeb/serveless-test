@@ -25,6 +25,7 @@ provider:
   stage: ${opt:stage, 'dev'}
   profile: ${env:PROFILE}
   region: ${env:REGION}
+  memorySize: 128
   timeout: 30
 
 functions:
@@ -88,8 +89,7 @@ functions:
           path: /blogs/{id}
           method: get
           cors: true
-          authorizer:
-            name: verify-token
+
   updateBlog:
     handler: services/blog.updateBlog
     events:
