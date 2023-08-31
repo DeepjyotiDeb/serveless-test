@@ -1,5 +1,5 @@
 org: deepjyotideb
-console: true
+# console: true
 service: user
 useDotenv: true
 
