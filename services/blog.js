@@ -120,6 +120,27 @@ export const getBlog = async (event, context) => {
     return failure({ status: false, error: error });
   }
 };
+export const getSearchResult = async (event, context) => {
+  try {
+    context.callbackWaitsForEmptyEventLoop = false;
+    const { id } = event.pathParameters;
+    try {
+      await connectToDatabase();
+    } catch (error) {
+      throw { statusCode: 503, message: ERRORS.DB_UNREACHABLE };
+    }
+    try {
+      const result = await BlogTable.find({ $text: { $search: id } });
+      return success({
+        result: result,
+      });
+    } catch (error) {
+      throw { statusCode: 502, message: ERRORS.NO_BLOG };
+    }
+  } catch (error) {
+    return failure({ status: false, error: error });
+  }
+};
 
 export const updateBlog = async (event, context) => {
   context.callbackWaitsForEmptyEventLoop = false;

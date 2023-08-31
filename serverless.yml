@@ -21,7 +21,7 @@ custom:
 
 provider:
   name: aws
-  runtime: nodejs14.x
+  runtime: nodejs18.x
   stage: ${opt:stage, 'dev'}
   profile: ${env:PROFILE}
   region: ${env:REGION}
@@ -87,6 +87,13 @@ functions:
     events:
       - http:
           path: /blogs/{id}
+          method: get
+          cors: true
+  searchBlog:
+    handler: services/blog.getSearchResult
+    events:
+      - http:
+          path: /search/{id}
           method: get
           cors: true
 

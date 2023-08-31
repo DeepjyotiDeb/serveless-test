@@ -26,7 +26,7 @@ const BlogSchema = new Schema(
   },
   { collection: 'blog' }
 );
-
+BlogSchema.index({ title: 'text', summary: 'text' });
 export const UserTable = model('users', UserSchema);
 export const BlogTable = model('blog', BlogSchema);
 
