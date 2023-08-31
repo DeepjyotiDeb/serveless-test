@@ -21,7 +21,7 @@ custom:
 
 provider:
   name: aws
-  runtime: nodejs18.x
+  runtime: nodejs16.x
   stage: ${opt:stage, 'dev'}
   profile: ${env:PROFILE}
   region: ${env:REGION}
